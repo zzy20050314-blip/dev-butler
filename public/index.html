@@ -294,10 +294,10 @@
         选择左侧专家开始对话——无需配置，打开即用。
       </div>
       <div class="empty-prompts">
-        <div class="empty-prompt" onclick="quickStart(9,'我不知道找谁，帮我分析一下需求')">🎯 不知道找谁？先问调度官 ARIA</div>
-        <div class="empty-prompt" onclick="quickStart(7,'帮我设计一个 Web 应用的架构方案')">💻 来，帮我设计个架构方案</div>
-        <div class="empty-prompt" onclick="quickStart(3,'帮我写一份新功能的产品需求文档')">📋 帮我写个产品需求文档</div>
-        <div class="empty-prompt" onclick="quickStart(5,'帮我分析这份业务数据的核心指标')">📊 帮我做数据分析</div>
+        <div class="empty-prompt" onclick="quickStart('ai-dispatcher','我不知道找谁，帮我分析一下需求')">🎯 不知道找谁？先问调度官 ARIA</div>
+        <div class="empty-prompt" onclick="quickStart('backend-developer','帮我设计一个 Web 应用的架构方案')">💻 来，帮我设计个架构方案</div>
+        <div class="empty-prompt" onclick="quickStart('senior-product-manager','帮我写一份新功能的产品需求文档')">📋 帮我写个产品需求文档</div>
+        <div class="empty-prompt" onclick="quickStart('data-analyst','帮我分析这份业务数据的核心指标')">📊 帮我做数据分析</div>
       </div>
     </div>
   </div>
@@ -573,8 +573,11 @@ function clearChat() {
 }
 
 function quickStart(eid, msg) {
-  selectExpert(eid, true);
-  setTimeout(() => { document.getElementById('message-input').value = msg; sendMessage(); }, 80);
+  // Support both num and id
+  const expert = S.experts.find(e => String(e.id) === String(eid) || e.num === Number(eid) || e.id === eid);
+  if (!expert) return showToast('专家未找到: ' + eid);
+  selectExpert(expert.id, true);
+  setTimeout(() => { document.getElementById('message-input').value = msg; sendMessage(); }, 100);
 }
 
 function onSendClick() {
